@@ -12,7 +12,7 @@
     "isolatedModules": true,
     "allowJs": false,
     "noEmit": true,
-    "typeRoots": ["../node_modules/@types", "../"]
+    "typeRoots": ["../node_modules/@types"]
   },
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"]
 }

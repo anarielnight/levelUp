@@ -30,6 +30,11 @@ const config: StorybookConfig = {
       ],
     });
 
+    webpackConfig.module.rules.push({
+      test: /\.md$/,
+      type: 'asset/source',
+    });
+
     webpackConfig.resolve = webpackConfig.resolve || {};
     webpackConfig.resolve.extensions = webpackConfig.resolve.extensions || [
       '.mjs',
