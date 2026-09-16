@@ -22,15 +22,15 @@ export interface PriorityGroup {
   sections: Section[];
 }
 
-export interface RoadmapData {
+export interface UsefulResourcesData {
   priorities: PriorityGroup[];
   learningPath?: string;
   resources?: string;
 }
 
-export interface RoadmapProps {
+export interface UsefulResourcesProps {
   title?: string;
-  data: RoadmapData;
+  data: UsefulResourcesData;
 }
 
 const PRIORITY_COLORS = {
@@ -57,7 +57,7 @@ const PRIORITY_COLORS = {
   },
 };
 
-function parseRoadmapMarkdown(markdown: string): RoadmapData {
+function parseUsefulResourcesMarkdown(markdown: string): UsefulResourcesData {
   const lines = markdown.split('\n');
   const priorities: PriorityGroup[] = [];
   let currentPriority: PriorityGroup | null = null;
@@ -201,7 +201,7 @@ function parseRoadmapMarkdown(markdown: string): RoadmapData {
     priorities,
     learningPath: learningPath.trim() || undefined,
     resources: resources.trim() || undefined,
-  };
+  } as UsefulResourcesData;
 }
 
 const CollapsibleSection: React.FC<{
@@ -387,8 +387,8 @@ const countChecklistItems = (sections: Section[]): { completed: number; total: n
   return { completed, total };
 };
 
-export const Roadmap: React.FC<RoadmapProps> = ({ 
-  title = 'Frontend Developer Roadmap',
+export const UsefulResources: React.FC<UsefulResourcesProps> = ({ 
+  title = 'Useful Resources',
   data 
 }) => {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
@@ -452,8 +452,8 @@ export const Roadmap: React.FC<RoadmapProps> = ({
         </p>
       </div>
 
-      {data.priorities.map((priority, pIdx) => {
-        const colors = PRIORITY_COLORS[priority.level];
+      {data.priorities.map((priority: PriorityGroup, pIdx: number) => {
+        const colors = PRIORITY_COLORS[priority.level as keyof typeof PRIORITY_COLORS];
         const { completed, total } = countChecklistItems(priority.sections);
         
         return (
@@ -532,7 +532,7 @@ export const Roadmap: React.FC<RoadmapProps> = ({
               color={colors.progress} 
             />
 
-            {priority.sections.map((section, sIdx) => (
+            {priority.sections.map((section: Section, sIdx: number) => (
               <CollapsibleSection
                 key={sIdx}
                 section={section}
@@ -544,33 +544,6 @@ export const Roadmap: React.FC<RoadmapProps> = ({
           </div>
         );
       })}
-
-      {data.learningPath && (
-        <div style={{
-          marginTop: '40px',
-          padding: '24px',
-          backgroundColor: '#eff6ff',
-          border: '2px solid #93c5fd',
-          borderRadius: '12px',
-        }}>
-          <h2 style={{
-            fontSize: '24px',
-            fontWeight: '700',
-            color: '#1e40af',
-            marginBottom: '16px',
-          }}>
-            📚 Learning Path Recommendations
-          </h2>
-          <div style={{
-            fontSize: '14px',
-            lineHeight: '1.7',
-            color: '#1e3a8a',
-            whiteSpace: 'pre-wrap',
-          }}>
-            {data.learningPath}
-          </div>
-        </div>
-      )}
 
       {data.resources && (
         <div style={{
@@ -602,4 +575,4 @@ export const Roadmap: React.FC<RoadmapProps> = ({
   );
 };
 
-export { parseRoadmapMarkdown };
+export { parseUsefulResourcesMarkdown };

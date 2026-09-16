@@ -48,12 +48,18 @@ function applyNetworkScenario(scenario: NetworkScenario) {
 
 export const decorators = [
   (Story: any, context: any) => {
-    const scenarioName =
-      (context.globals.networkScenario as NetworkScenario) ??
-      ((context.parameters as any).networkScenario as NetworkScenario) ??
-      'race-demo';
+    const networkSimulatorEnabled = context.parameters.networkSimulator?.enabled ?? true;
+    
+    if (networkSimulatorEnabled === false) {
+      disableNetworkSimulator();
+    } else {
+      const scenarioName =
+        (context.globals.networkScenario as NetworkScenario) ??
+        ((context.parameters as any).networkScenario as NetworkScenario) ??
+        'race-demo';
 
-    applyNetworkScenario(scenarioName);
+      applyNetworkScenario(scenarioName);
+    }
 
     return Story();
   },
